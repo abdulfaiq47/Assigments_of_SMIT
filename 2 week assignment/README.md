@@ -12,6 +12,7 @@ type "git init"
 #### 4️⃣ Add your GitHub repository as a remote
 Copy the HTTPS link from your GitHub repo (e.g., https://github.com/username/my-project.git)
 <img width="467" height="359" alt="image" src="https://github.com/user-attachments/assets/6cc33c07-6481-4ce1-94e3-7160e981acdd" />
+
 and type "git remote add origin https://github.com/username/my-project.git" Note here your repo link "https://github.com/username/my-project.git"
 ###5️⃣ Add all files to Git
 then type "git add ."
