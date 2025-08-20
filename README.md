@@ -15,13 +15,13 @@ Copy the HTTPS link from your GitHub repo (e.g., https://github.com/username/my-
 
 and type "git remote add origin https://github.com/username/my-project.git" Note here your repo link "https://github.com/username/my-project.git"
 
-###5️⃣ Add all files to Git
+##5️⃣ Add all files to Git
 then type "git add ."
 
-###6️⃣ Commit your changes
+##6️⃣ Commit your changes
 type "git commit -m "Initial commit" "
 
-###7️⃣ Push to GitHub
+##7️⃣ Push to GitHub
 type "git branch -M main" note: Rename branch to main (only needed first time)
 then type " git push -u origin main " 
 
