@@ -1,0 +1,11 @@
+streamlit
+pandas
+joblib
+scikit-learn
+seaborn
+matplotlib
+numpy
+
+
+
+#  For deployment purpose in deployment server want al modules name used in project to install at onece
