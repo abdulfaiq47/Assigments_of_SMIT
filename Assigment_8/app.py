@@ -3,7 +3,7 @@ import joblib # to laod pickle file import joblib
 import numpy as np  # for arranging all input in one 
 
 
-model = joblib.load("House_pred.pkl")  # loaded
+model = joblib.load("Assigment_8/House_pred.pkl")  # loaded
 
 
 st.title("House Prediction App") # For the title of web APP
