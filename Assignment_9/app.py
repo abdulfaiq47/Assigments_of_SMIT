@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 # ------------------------------------
 @st.cache_data
 def load_data():
-    df = pd.read_csv("dataset.csv")
+    df = pd.read_csv("Assignment_9/dataset.csv")
     df["TotalCharges"] = pd.to_numeric(df["TotalCharges"], errors="coerce")
     df.drop("customerID", axis=1, inplace=True)
     df.dropna(inplace=True)
@@ -113,3 +113,4 @@ ax3.set_xlabel("Churn")
 ax3.set_ylabel("Monthly Charges")
 ax3.set_title("Monthly Charges vs Churn")
 st.pyplot(fig3)
+
