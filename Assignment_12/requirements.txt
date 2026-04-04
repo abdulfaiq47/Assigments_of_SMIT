@@ -1,3 +1,4 @@
+python=3.10.*
 Flask>=2.3.2
 Werkzeug>=2.3.8
 tensorflow==2.14.0
