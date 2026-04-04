@@ -1,0 +1,69 @@
+hello how are you doing today i hope you are doing well
+how are you feeling today i am feeling good and happy
+what are you doing right now i am working on a project
+it is a nice day outside and the weather is very good
+i like to learn new things every day and improve my skills
+machine learning is interesting and useful for many applications
+artificial intelligence is changing the world very fast
+people use technology every day in their daily lives
+how is your work going today i hope everything is fine
+i am learning programming and building new projects
+this is a simple dataset for training a language model
+we are creating sentences to help the model learn patterns
+the model will learn how words come after each other
+this helps in predicting the next word in a sentence
+
+how are you doing today my friend i hope you are doing great
+it is important to stay positive and keep learning new things
+practice makes a person better and more confident
+learning never stops and we should always stay curious
+technology is evolving and we should adapt to it
+
+i am going to the market to buy some groceries
+what do you want to eat today i am thinking about pizza
+do you like coffee or tea i prefer coffee in the morning
+it is important to eat healthy food and stay active
+exercise helps in maintaining a healthy body and mind
+
+how are things going at your side i hope everything is smooth
+i am working on improving my coding skills every day
+building projects is the best way to learn programming
+mistakes help us learn and grow faster in our journey
+
+the sun rises in the east and sets in the west
+time is very valuable so we should use it wisely
+success comes with hard work and consistency
+never give up and always keep trying again
+
+how are you doing today i am doing fine thank you
+what are your plans for today i am going to study
+learning new skills can open many opportunities
+knowledge is power and helps us grow in life
+
+we are building a next word prediction model
+this model learns patterns from text data
+it can predict what word comes next in a sentence
+this is useful in chatbots and text generation systems
+
+how are you feeling now i hope you are feeling better
+it is good to take breaks and relax sometimes
+balance between work and rest is very important
+a healthy mind leads to a healthy life
+
+people communicate using language and words
+understanding language is a key part of intelligence
+natural language processing helps computers understand text
+this is a fascinating field in artificial intelligence
+
+how are you doing my friend i hope everything is good
+let us continue learning and improving every day
+small steps lead to big success over time
+consistency is the key to achieving goals
+
+this dataset contains simple and clear sentences
+it helps the model learn basic English structure
+this will improve next word prediction accuracy
+practice and experimentation will make your model better
+
+how are you doing today i hope everything is going well
+keep learning keep building and keep growing
