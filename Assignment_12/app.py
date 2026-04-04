@@ -1,52 +1,38 @@
-# app.py
 import streamlit as st
-import pickle
-import numpy as np
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+import pickle
+import numpy as np
 import os
 
-# --- CONFIG ---
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, "next_word_model.keras")  # your saved model
-TOKENIZER_PATH = os.path.join(BASE_DIR, "tokenizer.pkl")      # your tokenizer
-MAX_SEQUENCE_LEN = 50  # same as in training
+st.set_page_config(page_title="Next Word Predictor")
 
-# --- LOAD MODEL & TOKENIZER ---
+# Paths
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(BASE_DIR, "next_word_model.h5")
+tokenizer_path = os.path.join(BASE_DIR, "tokenizer.pkl")
+
 @st.cache_resource
-def load_model_and_tokenizer():
-    model = load_model(MODEL_PATH)
-    with open(TOKENIZER_PATH, "rb") as f:
+def load_my_assets():
+    model = load_model(model_path)
+    with open(tokenizer_path, "rb") as f:
         tokenizer = pickle.load(f)
     return model, tokenizer
 
-model, tokenizer = load_model_and_tokenizer()
+st.title("🔮 Next Word Predictor")
 
-# --- PREDICTION FUNCTION ---
-def predict_next_word(model, tokenizer, text, max_sequence_len):
-    token_list = tokenizer.texts_to_sequences([text])[0]
-    if not token_list:
-        return None
-    token_list = pad_sequences([token_list], maxlen=max_sequence_len-1, padding='pre')
-    prediction = model.predict(token_list, verbose=0)
-    prediction_word_index = np.argmax(prediction)
-    for word, index in tokenizer.word_index.items():
-        if index == prediction_word_index:
-            return word
-    return None
+try:
+    model, tokenizer = load_my_assets()
+    index_word = {v: k for k, v in tokenizer.word_index.items()}
+    
+    input_text = st.text_input("Enter your phrase:")
+    if st.button("Predict") and input_text:
+        sequence = tokenizer.texts_to_sequences([input_text])[0]
+        token_list = pad_sequences([sequence], maxlen=49, padding="pre")
+        predicted = model.predict(token_list, verbose=0)[0]
+        next_word = index_word.get(np.argmax(predicted))
+        st.success(f"Predicted next word: **{next_word}**")
 
-# --- STREAMLIT UI ---
-st.title("Next Word Predictor")
-st.write("Type some text and I will predict the next word for you!")
-
-user_input = st.text_input("Enter your text:")
-
-if st.button("Predict"):
-    if user_input.strip() == "":
-        st.warning("Please enter some text first.")
-    else:
-        next_word = predict_next_word(model, tokenizer, user_input, MAX_SEQUENCE_LEN)
-        if next_word:
-            st.success(f"Next word prediction: **{next_word}**")
-        else:
-            st.error("Could not predict the next word. Try adding more context.")
+except Exception as e:
+    st.error(f"File Error: {e}")
+    st.info("If you see 'file signature not found', please do Step 2 below.")
