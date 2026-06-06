@@ -1,23 +1,68 @@
-from sentence_transformers import SentenceTransformer
+import hashlib
+import math
+import numpy as np
 
-MODEL_NAME = "all-MiniLM-L6-v2"   # free, fast, 384-dim, no API key needed
-_model = None
+# Pure Python embeddings - no torch, no sentence-transformers
+# Uses TF-IDF style bag-of-words with hashing trick
+# Dimension must match PINECONE_DIMENSION in pinecone_client.py
+
+DIMENSION = 512
 
 
-def _get_model() -> SentenceTransformer:
-    global _model
-    if _model is None:
-        _model = SentenceTransformer(MODEL_NAME)
-    return _model
+def _tokenize(text: str) -> list[str]:
+    text = text.lower()
+    tokens = []
+    word = ""
+    for ch in text:
+        if ch.isalnum():
+            word += ch
+        else:
+            if word:
+                tokens.append(word)
+            word = ""
+    if word:
+        tokens.append(word)
+    return tokens
+
+
+def _hash_token(token: str, dim: int) -> int:
+    h = int(hashlib.md5(token.encode()).hexdigest(), 16)
+    return h % dim
+
+
+def _sign_token(token: str) -> float:
+    h = int(hashlib.sha1(token.encode()).hexdigest(), 16)
+    return 1.0 if h % 2 == 0 else -1.0
+
+
+def _normalize(vec: list[float]) -> list[float]:
+    norm = math.sqrt(sum(x * x for x in vec))
+    if norm == 0:
+        return vec
+    return [x / norm for x in vec]
 
 
 def get_embedding(text: str) -> list[float]:
-    """Return a single embedding vector (no API key required)."""
-    model = _get_model()
-    return model.encode(text, normalize_embeddings=True).tolist()
+    """Hashing trick TF-IDF embedding — no external model needed."""
+    tokens = _tokenize(text)
+    vec = [0.0] * DIMENSION
+
+    # bigrams + unigrams
+    ngrams = tokens + [tokens[i] + "_" + tokens[i+1] for i in range(len(tokens)-1)]
+
+    counts: dict[str, int] = {}
+    for t in ngrams:
+        counts[t] = counts.get(t, 0) + 1
+
+    total = max(len(ngrams), 1)
+    for token, count in counts.items():
+        tf = count / total
+        idx = _hash_token(token, DIMENSION)
+        sign = _sign_token(token)
+        vec[idx] += sign * tf
+
+    return _normalize(vec)
 
 
 def get_embeddings_batch(texts: list[str]) -> list[list[float]]:
-    """Return embeddings for a list of texts in one pass."""
-    model = _get_model()
-    return model.encode(texts, normalize_embeddings=True, batch_size=64).tolist()
+    return [get_embedding(t) for t in texts]
