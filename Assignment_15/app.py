@@ -12,6 +12,17 @@ st.set_page_config(
     layout="wide",
 )
 
+# ─── Read keys: secrets first, sidebar as fallback ──────────────────────────
+def get_secret(key):
+    try:
+        return st.secrets[key]
+    except:
+        return None
+
+groq_key     = get_secret("GROQ_API_KEY")
+pinecone_key = get_secret("PINECONE_API_KEY")
+pinecone_index_name = get_secret("PINECONE_INDEX")
+
 # ─── Custom CSS ─────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
@@ -145,22 +156,33 @@ h1, h2, h3 { font-family: 'Syne', sans-serif; }
 st.markdown('<div class="hero-title">Mini Search Engine</div>', unsafe_allow_html=True)
 st.markdown('<div class="hero-sub">// SEMANTIC PDF SEARCH · GROQ AI + PINECONE</div>', unsafe_allow_html=True)
 
-# ─── Sidebar ────────────────────────────────────────────────────────────────
+# ─── Sidebar ─────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("### ⚙️ Configuration")
     st.markdown("---")
 
-    groq_key = st.text_input("🟢 Groq API Key", type="password", placeholder="gsk_...")
-    pinecone_key = st.text_input("🔵 Pinecone API Key", type="password", placeholder="pcsk_...")
-    pinecone_index = st.text_input("📌 Pinecone Index Name", placeholder="mini-search-engine")
+    # If secrets exist, show green status. Otherwise show input boxes.
+    if groq_key:
+        st.success("✅ Groq key loaded from secrets")
+    else:
+        groq_key = st.text_input("🟢 Groq API Key", type="password", placeholder="gsk_...")
+
+    if pinecone_key:
+        st.success("✅ Pinecone key loaded from secrets")
+    else:
+        pinecone_key = st.text_input("🔵 Pinecone API Key", type="password", placeholder="pcsk_...")
+
+    if pinecone_index_name:
+        st.success(f"✅ Index: {pinecone_index_name}")
+    else:
+        pinecone_index_name = st.text_input("📌 Pinecone Index Name", placeholder="mini-search-engine")
 
     st.markdown("---")
     top_k = st.slider("Top-K Results", 1, 10, 5)
-
     st.markdown("---")
     st.caption("Groq key → console.groq.com/keys")
-    st.caption("Pinecone key → app.pinecone.io → API Keys")
-    st.caption("Embeddings run FREE locally (no key needed)")
+    st.caption("Pinecone key → app.pinecone.io")
+    st.caption("Embeddings run FREE locally")
 
 # ─── Main Layout ─────────────────────────────────────────────────────────────
 col1, col2 = st.columns([1, 1], gap="large")
@@ -194,14 +216,14 @@ with col1:
     index_button = st.button("⚡ Index Documents", use_container_width=True)
 
     if index_button:
-        if not pinecone_key or not pinecone_index:
-            st.error("❌ Enter your Pinecone API key and index name in the sidebar.")
+        if not pinecone_key or not pinecone_index_name:
+            st.error("❌ Pinecone API key and index name are required.")
         elif not uploaded_files or len(uploaded_files) < 5:
             st.error("❌ Please upload at least 5 PDF files.")
         else:
             with st.spinner("Connecting to Pinecone..."):
                 try:
-                    pc_index = init_pinecone(pinecone_key, pinecone_index)
+                    pc_index = init_pinecone(pinecone_key, pinecone_index_name)
                     st.success("✅ Pinecone connected!")
                 except Exception as e:
                     st.error(f"Pinecone error: {e}")
@@ -246,14 +268,14 @@ with col2:
     search_button = st.button("🔎 Search", use_container_width=True)
 
     if search_button:
-        if not pinecone_key or not pinecone_index:
-            st.error("❌ Fill in Pinecone API key and index name in the sidebar.")
+        if not pinecone_key or not pinecone_index_name:
+            st.error("❌ Pinecone API key and index name are required.")
         elif not query.strip():
             st.warning("⚠️ Please enter a search query.")
         else:
             with st.spinner("Searching your documents…"):
                 try:
-                    pc_index = init_pinecone(pinecone_key, pinecone_index)
+                    pc_index = init_pinecone(pinecone_key, pinecone_index_name)
                     query_emb = get_embedding(query)
                     results = query_pinecone(pc_index, query_emb, top_k)
 
