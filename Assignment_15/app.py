@@ -391,18 +391,6 @@ with st.container():
             elif results is not None:
                 st.info("No semantic matches found. Try a different query or add more PDFs.")
 
-    st.markdown("---")
-
-    st.markdown(
-        """
-        <div class='card'>
-            <h2 style='margin-top:0;'>Why this UI is better</h2>
-            <ul style='color:#cbd5e1; font-size:0.96rem; line-height:1.8;'>
-                <li>Clear step-by-step workflow for upload, indexing, and searching.</li>
-                <li>Responsive layout with modern glassmorphism and gradient accents.</li>
-                <li>Progress feedback while indexing keeps the experience smooth.</li>
-            </ul>
-        </div>
-        """,
+,
         unsafe_allow_html=True,
     )
