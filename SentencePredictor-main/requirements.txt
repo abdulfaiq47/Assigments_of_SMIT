@@ -1,6 +1,0 @@
-streamlit
-sentence-transformers
-PyMuPDF
-pinecone
-python-dotenv
-torch
