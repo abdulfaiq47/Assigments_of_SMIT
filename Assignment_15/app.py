@@ -391,6 +391,6 @@ with st.container():
             elif results is not None:
                 st.info("No semantic matches found. Try a different query or add more PDFs.")
 
-,
+
         unsafe_allow_html=True,
     )
